@@ -1,48 +1,55 @@
-import { OpenAI, ClientOptions } from 'openai'
-import * as readline from 'readline'
-import * as dotenv from 'dotenv'
-import chalk from 'chalk'
-import fs from 'fs'
-import path from 'path'
+import chalk from "chalk"
+import minimist from "minimist"
+import { error, log, getFunctions, putFunction } from "./utils.js"
+
+import { hellogpt, assistant_file, chat, dump_messages_content, dump_assistants, dump_messages, dump_runs, dump_steps, dump_thread } from "./assistant.js"
 
 
-const envPaths = ['./.env', './.env.dev.local']
-
-envPaths.forEach((p) => {
-    p = path.resolve(p)
-    if (fs.existsSync(p)) {
-        console.log("Use envirnoment", p)
-        dotenv.config({ path: p, override: true })
-    }
-
-})
-
-// Load OpenAI API key from environment variable
+putFunction(hellogpt)
+putFunction(assistant_file)
+putFunction(chat)
+putFunction(dump_thread)
+putFunction(dump_assistants)
+putFunction(dump_messages)
+putFunction(dump_messages_content)
+putFunction(dump_runs)
+putFunction(dump_steps)
 
 
-const clientOptions: ClientOptions = {
-    apiKey: process.env.OPENAI_API_KEY,
+async function test() {
+    log(chalk.red('Error me'))
 }
-const openai = new OpenAI(clientOptions)
+putFunction(test)
 
-
-// Initialize messages array
-// const messages: ChatCompletionRequestMessage[] = [];
-
-// // Initialize readline interface
-// const userInterface = readline.createInterface({
-//   input: process.stdin,
-//   output: process.stdout,
-// });
-
-
-async function main() {
-    const chatCompletion = await openai.chat.completions.create({
-        messages: [{ role: 'user', content: 'Say this is a test in Chinese' }],
-        model: 'gpt-3.5-turbo',
+export default function main() {
+    const argv = minimist(process.argv.slice(2), {
+        alias: {
+            'h': 'help'
+        }
     })
-    console.log(">>chatCompletion", chatCompletion)
-    console.log(">>JSON", JSON.stringify(chatCompletion))
+    console.log(chalk.blue("====================="))
+    process.on("exit", (code) => {
+        console.log(chalk.blue("====================="))
+        console.log(chalk.blue("exit", code))
+    })
+
+    const functions = getFunctions()
+
+    if (argv.help || !argv._ || argv._?.length == 0) {
+        console.log('Run:')
+        console.log('    yarn start <case>')
+        console.log('')
+        console.log(`Available functions : [${Array.from(functions.keys()).join(', ')}]`)
+        return
+    }
+    if (argv._?.length > 0) {
+        const c = argv._[0]
+        if (!functions.has(c)) {
+            error(`Function ${c} not found, available functions : [${Array.from(functions.keys()).join(', ')}]`)
+        } else {
+            functions.get(c)?.apply(undefined, argv._.slice(1))
+        }
+    }
 }
 
 main()
