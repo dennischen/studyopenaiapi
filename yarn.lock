@@ -282,6 +282,11 @@ strip-ansi@^7.1.0:
   dependencies:
     ansi-regex "^6.0.1"
 
+tiktoken@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/tiktoken/-/tiktoken-1.0.11.tgz#a2d1926133a5c0ff21fec732ef6af49c08f332b6"
+  integrity sha512-aMJcn9NGmb6zDXkCweJLnACyIyjdiYIk1odAfnCUvin7O1QsV1rQP1hatGDMhQovxkeSJhFeU7QuGkbDHGciDQ==
+
 tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"

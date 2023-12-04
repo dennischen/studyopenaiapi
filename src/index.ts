@@ -1,9 +1,11 @@
 import chalk from "chalk"
 import minimist from "minimist"
-import { error, log, getFunctions, putFunction } from "./utils.js"
+import { error, getFunctions, putFunction } from "./utils.js"
 
-import { hellogpt, assistant_file, chat, dump_messages_content, dump_assistants, dump_messages, dump_runs, dump_steps, dump_thread } from "./assistant.js"
+import { assistant_file, chat, dump_assistants, dump_messages, dump_messages_content, dump_runs, dump_steps, dump_thread, hellogpt } from "./assistant.js"
 
+import { count_gpt2_token, count_gpt_35_token } from './tiktoken.js'
+import { test } from "./remark.js"
 
 putFunction(hellogpt)
 putFunction(assistant_file)
@@ -15,10 +17,9 @@ putFunction(dump_messages_content)
 putFunction(dump_runs)
 putFunction(dump_steps)
 
+putFunction(count_gpt2_token)
+putFunction(count_gpt_35_token)
 
-async function test() {
-    log(chalk.red('Error me'))
-}
 putFunction(test)
 
 export default function main() {
